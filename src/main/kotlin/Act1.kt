@@ -2,21 +2,12 @@ import androidx.compose.desktop.ui.tooling.preview.Preview
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.*
-
-
-import androidx.compose.material.Button
-import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
@@ -74,6 +65,8 @@ fun act3(){
         modifier = Modifier
             .fillMaxSize()
             .absolutePadding(left = 150.dp, right = 150.dp)
+        ,
+        horizontalAlignment = Alignment.CenterHorizontally
     ){
 
         Box(
@@ -116,13 +109,14 @@ fun act4(){//No se porque no funciona
     Row (
         modifier = Modifier
             .fillMaxSize(),
-        verticalAlignment = (Alignment.Bottom)
+        verticalAlignment = (Alignment.Bottom),
+        horizontalArrangement = Arrangement.SpaceEvenly//vip
 
     ){
         Surface (
             modifier = Modifier
                 .border(5.dp, Color.Red)
-                .size(height = 600.dp, width = 70.dp)
+                .size(height = 600.dp, width = 80.dp)
                 .padding(10.dp,0.dp)
 
         ){
@@ -157,8 +151,62 @@ fun act4(){//No se porque no funciona
         }
     }
 }
+@Composable
+fun espacio (espacio:Float){
+    Spacer(
+        modifier = Modifier
+            .fillMaxSize(espacio)
+    )
+}
+
+@Composable
+@Preview
+fun act5() {
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally
+
+    ) {
+
+        Box(
+            modifier = Modifier
+                .background(Color.Blue)
+                .size(300.dp, 200.dp)
+
+        ) {
+            Text("Box 1")
+        }
+
+        Box(
+            modifier = Modifier
+                .background(Color.Gray)
+                .size(300.dp, 200.dp)
 
 
+        ) {
+            Text("Box 2")
+        }
+
+        Box(
+            modifier = Modifier
+                .background(Color.Green)
+                .size(300.dp, 200.dp),
+
+            ) {
+            Text("Box 3")
+        }
+        Box(
+            modifier = Modifier
+                .background(Color.Magenta)
+                .size(300.dp, 200.dp)
+                .fillMaxSize()
+
+        ) {
+            Text("Box 4")
+        }
+
+
+    }
+}
 fun main() = application {
     val windowState = rememberWindowState(size = DpSize(1200.dp,800.dp))
     Window(
@@ -167,7 +215,7 @@ fun main() = application {
         state = windowState
     ){
 
-        act3()
+        act5()
 
     }
 }
