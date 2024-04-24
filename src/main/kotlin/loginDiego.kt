@@ -1,21 +1,35 @@
 import androidx.compose.desktop.ui.tooling.preview.Preview
-import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.background
+import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-
+import androidx.compose.material.Button
+import androidx.compose.foundation.ContextMenuDataProvider
+import androidx.compose.foundation.ContextMenuItem
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.selection.SelectionContainer
+import androidx.compose.material.Text
+import androidx.compose.material.TextField
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.window.singleWindowApplication
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
+import androidx.compose.material.TextField
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
+import java.awt.SystemColor.text
 
 fun main() = application {
     val windowState = rememberWindowState(size = DpSize(1200.dp,800.dp))
@@ -35,6 +49,8 @@ fun main() = application {
 @Composable
 @Preview
 fun login(){
+    val Usuario = remember { mutableStateOf("") }
+    val Contrasenia = remember { mutableStateOf("") }
     Box(
         modifier = Modifier
             .background(color = Color.Gray)
@@ -45,16 +61,45 @@ fun login(){
             modifier = Modifier.size(300.dp,400.dp).align(Alignment.Center)
         ){
             Column(){
-                Text("Buenas tardes",Modifier.padding(60.dp).align(alignment = Alignment.CenterHorizontally), fontFamily = FontFamily.SansSerif)
-                Text("Buenas tardes",Modifier.padding(60.dp).align(alignment = Alignment.CenterHorizontally), fontFamily = FontFamily.SansSerif)
+                ContextMenuDataProvider(
+                    items = {
+                        listOf(
+                            ContextMenuItem("User-defined Action") {/*do something here*/ },
+                            ContextMenuItem("Another user-defined action") {/*do something else*/ }
+                        )
+                    },
+                ) {
+                    Spacer(Modifier.height(100.dp))
+                    TextField(
+                        value = Usuario.value,
+                        onValueChange = { Usuario.value = it },
+                        label = { Text(text = "Usuario")},
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .size(200.dp,50.dp)
+                    )
 
-                Box(
-                    modifier = Modifier
-                        .padding(30.dp)
-                        .align(alignment = Alignment.CenterHorizontally)
-                        .background(color = Color(213,323,4))
+                    Spacer(Modifier.height(25.dp))
+
+                    TextField(
+                        value = Contrasenia.value,
+                        onValueChange = { Contrasenia.value = it },
+                        label = { Text(text = "Contraseña")},
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .size(200.dp,50.dp),
+                        visualTransformation = PasswordVisualTransformation()
+                    )
+                    Spacer(Modifier.height(25.dp))
+                }
+
+                Button(modifier = Modifier
+                            .align(Alignment.CenterHorizontally),
+                    onClick = {
+
+                    }
                 ){
-                    Text("Buenas tardes", fontFamily = FontFamily.SansSerif)
+                    Text(" Login ", fontFamily = FontFamily.SansSerif)
                 }
             }
         }
