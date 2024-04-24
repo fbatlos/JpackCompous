@@ -61,7 +61,7 @@ fun main() = application {
     ){
         val students = remember { mutableStateListOf("Juan", "Victor", "Esther", "Jaime")}
         StudentList(students){
-            students.add("Miguel")
+            if (!students.contains("Miguel")) (students.add( "Miguel"))
         }
 
     }
