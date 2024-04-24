@@ -10,19 +10,18 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.singleWindowApplication
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.material.TextField
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -51,6 +50,7 @@ fun main() = application {
 fun login(){
     val Usuario = remember { mutableStateOf("") }
     val Contrasenia = remember { mutableStateOf("") }
+
     Box(
         modifier = Modifier
             .background(color = Color.Gray)
@@ -70,6 +70,7 @@ fun login(){
                     },
                 ) {
                     Spacer(Modifier.height(100.dp))
+
                     TextField(
                         value = Usuario.value,
                         onValueChange = { Usuario.value = it },
@@ -80,16 +81,29 @@ fun login(){
                     )
 
                     Spacer(Modifier.height(25.dp))
-
-                    TextField(
-                        value = Contrasenia.value,
-                        onValueChange = { Contrasenia.value = it },
-                        label = { Text(text = "Contraseña")},
+                    Row (
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .size(200.dp,50.dp),
-                        visualTransformation = PasswordVisualTransformation()
-                    )
+                    ) {
+                        var active by remember { mutableStateOf(false) }
+                        TextField(
+                            value = Contrasenia.value,
+                            onValueChange = { Contrasenia.value = it },
+                            label = { Text(text = "Contraseña") },
+                            modifier = Modifier
+                                .align(Alignment.CenterVertically)
+                                .size(170.dp, 50.dp),
+
+                            visualTransformation = if (!active) PasswordVisualTransformation() else VisualTransformation.None)//else{VisualTransformation.None}}
+
+                        Button(
+                            modifier = Modifier
+                                .size(30.dp,30.dp)
+                                .align(Alignment.CenterVertically),
+                            onClick = {
+                            if (!active) active = true else active=false
+                        }){  }
+                    }
                     Spacer(Modifier.height(25.dp))
                 }
 
