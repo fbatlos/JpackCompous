@@ -74,7 +74,7 @@ fun main() = singleWindowApplication(
 }
 
 @Composable
-fun TextBox(text: String = "Item") {
+fun TextBox(text: String) {
     Box(
         modifier = Modifier.height(32.dp)
             .width(400.dp)
