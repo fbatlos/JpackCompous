@@ -9,17 +9,14 @@ import androidx.compose.foundation.layout.*
 
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
-import androidx.compose.material.TextField
+import androidx.compose.material.*
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.DpSize
 import androidx.compose.ui.unit.dp
@@ -74,15 +71,15 @@ fun listado() {
 
             Column {
                 scroll(items = lista)
-                limpiarListado { ruta.writer() }
+                limpiarListado { ruta.writer()
+                    lista = leer(ruta)
+                }
+
             }
         }
             Spacer(modifier = Modifier.height(20.dp))
 
             guardarCambios { escribir(ruta, lista) }
-
-
-
 
 
     }
@@ -95,7 +92,6 @@ fun aniadirAlumno(
     oncambioTexto: (String) -> Unit,
     onAniadirTexto: () -> Unit
 ) {
-    val focusManager = LocalFocusManager.current
 
     Column (
         horizontalAlignment = Alignment.CenterHorizontally
@@ -104,8 +100,8 @@ fun aniadirAlumno(
             value = inputTexto,
             onValueChange = oncambioTexto,
             label = { Text("Nuevo Elemento") },
-            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done),
-            keyboardActions = KeyboardActions(onDone = { focusManager.clearFocus() }),
+            keyboardOptions = KeyboardOptions.Default.copy(imeAction = ImeAction.Done)
+
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -163,20 +159,23 @@ fun leer(file: File): List<String> {
 @Composable
 @Preview
 fun scroll(items: List<String>){
+        Text("Estudiantes <<${items.size}>>")
         Column (
-            modifier = Modifier.size(150.dp,200.dp)
-                .background(color = Color(180, 180, 180))
+            modifier = Modifier.size(250.dp,400.dp)
+                .border(3.dp, Color.Black)
                 .padding(10.dp)
         ) {
 
             val state = rememberLazyListState()
+
+
             //Creará el scroll asignado y aunque cambie las dimensiones no cambia el espacio
-            LazyColumn(Modifier.fillMaxSize().padding(end = 12.dp), state) {
+            LazyColumn(Modifier.fillMaxSize().padding(end = 10.dp), state) {
                 items(items.size) { x ->
-                    TextBox(items[x])
+                    TextBox(items[x] , onclick = ({ items.drop(x) }))
+
                     Spacer(modifier = Modifier.height(5.dp))
                 }
-
             }
             VerticalScrollbar(
                 modifier = Modifier.align(Alignment.End).fillMaxHeight(),
@@ -189,14 +188,19 @@ fun scroll(items: List<String>){
 
 
 @Composable
-fun TextBox(text: String) {
-    Box(
-        modifier = Modifier.height(32.dp)
-            .width(400.dp)
-            .background(color = Color(200, 0, 0, 20))
-            .padding(start = 10.dp),
-        contentAlignment = Alignment.CenterStart
-    ) {
-        Text(text = text)
-    }
+fun TextBox(text: String, onclick:()->Unit) {
+    OutlinedTextField(
+            value = text,
+            onValueChange = { onclick },
+            trailingIcon = {
+                           IconButton(
+                               enabled = true,
+                               onClick = {onclick()}
+                           ){
+                               Icon(imageVector = Icons.Default.Delete,"Eliminar estudiantes.")
+                           }
+            },
+        enabled = false
+    )
 }
+
