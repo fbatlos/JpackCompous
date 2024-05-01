@@ -70,8 +70,15 @@ fun listado() {
             )
 
             Column {
-                scroll(items = lista)
-                limpiarListado { ruta.writer()
+                scroll(items = lista){
+
+                    lista = lista.toMutableList().apply { removeAt(it)}
+                    ruta.writer()
+                    escribir(ruta,lista)
+
+                }
+                limpiarListado {
+                    ruta.writer()
                     lista = leer(ruta)
                 }
 
@@ -79,7 +86,10 @@ fun listado() {
         }
             Spacer(modifier = Modifier.height(20.dp))
 
-            guardarCambios { escribir(ruta, lista) }
+            guardarCambios {
+                ruta.writer()
+                escribir(ruta, lista)
+            }
 
 
     }
@@ -158,8 +168,8 @@ fun leer(file: File): List<String> {
 //Hacer con lazy
 @Composable
 @Preview
-fun scroll(items: List<String>){
-        Text("Estudiantes <<${items.size}>>")
+fun scroll(items: List<String>, onItemClick: (Int) -> Unit){
+        Text("Estudiantes : ${items.size}")
         Column (
             modifier = Modifier.size(250.dp,400.dp)
                 .border(3.dp, Color.Black)
@@ -172,7 +182,7 @@ fun scroll(items: List<String>){
             //Creará el scroll asignado y aunque cambie las dimensiones no cambia el espacio
             LazyColumn(Modifier.fillMaxSize().padding(end = 10.dp), state) {
                 items(items.size) { x ->
-                    TextBox(items[x] , onclick = ({ items.drop(x) }))
+                    TextBox(items[x] , onClick = { onItemClick(x) })
 
                     Spacer(modifier = Modifier.height(5.dp))
                 }
@@ -188,19 +198,19 @@ fun scroll(items: List<String>){
 
 
 @Composable
-fun TextBox(text: String, onclick:()->Unit) {
+fun TextBox(text: String, onClick: () -> Unit) {
     OutlinedTextField(
-            value = text,
-            onValueChange = { onclick },
-            trailingIcon = {
-                           IconButton(
-                               enabled = true,
-                               onClick = {onclick()}
-                           ){
-                               Icon(imageVector = Icons.Default.Delete,"Eliminar estudiantes.")
-                           }
-            },
-        enabled = false
+        value = text,
+        onValueChange = { /* No se necesita hacer nada aquí */ },
+        enabled = false,
+        trailingIcon = {
+            IconButton(
+                enabled = true,
+                onClick = onClick // Solo pasa la función onClick, no la llames
+            ) {
+                Icon(imageVector = Icons.Default.Delete, contentDescription = "Eliminar estudiantes.")
+            }
+        }
     )
 }
 
